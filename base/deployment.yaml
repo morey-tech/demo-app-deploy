@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: demo-app
-          image: ghcr.io/<username>/demo-app:latest
+          image: ghcr.io/morey-tech/demo-app:latest
           # env:
           # - name: SECRET
           #   valueFrom:
