@@ -1,0 +1,58 @@
+name: Promote Image Changes
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "promote workflow currently disabled"
+
+#   promote-image-change:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       pull-requests: write
+#     steps:
+#       - uses: actions/checkout@v3
+#         with:
+#           token: ${{ secrets.DEPLOY_PAT }}
+#           fetch-depth: 0
+      
+#       - name: Fetch Metadata
+#         run: git fetch origin "refs/notes/*:refs/notes/*"
+      
+#       - name: Get Commit Metadata
+#         id: commit-metadata
+#         run: |
+#           pat='image: (.*)'; [[ "$(git notes show)" =~ $pat ]] && echo "::set-output name=IMAGE::${BASH_REMATCH[1]}" || echo ''
+#           pat='env: (.*)'; [[ "$(git notes show)" =~ $pat ]] && echo "::set-output name=ENV::${BASH_REMATCH[1]}" || echo ''
+
+#       - uses: fregante/setup-git-user@v1
+#         if: ${{ steps.commit-metadata.outputs.IMAGE }}
+      
+#       - name: Promote Image Change
+#         if: ${{ steps.commit-metadata.outputs.IMAGE }}
+#         env:
+#           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         run: |
+#           IMAGE=${{ steps.commit-metadata.outputs.IMAGE }}
+#           ENV="${{ steps.commit-metadata.outputs.ENV || 'dev' }}"
+#           if [ $ENV == "dev" ]; then
+#             echo "Promoting $IMAGE to stage"
+#             cd env/stage && kustomize edit set image $IMAGE
+#             git add .
+#             git commit -m "chore(stage): promote to $IMAGE"
+#             git notes append -m "image: $IMAGE"
+#             git notes append -m "env: stage"
+#             git push origin "refs/notes/*" --force && git push origin main
+#           elif [ $ENV == "stage" ]; then
+#             echo "Promoting $IMAGE to prod"
+#             git checkout -b auto-promotion-prod
+#             cd env/prod && kustomize edit set image $IMAGE
+#             git add .
+#             git commit -m "chore(prod): promote to $IMAGE"
+#             git push origin auto-promotion-prod --force
+#             gh pr create --title "chore(prod): promote to \`$IMAGE\`" --body "Promote \`prod\` to \`$IMAGE\`" --base main --head auto-promotion-prod
+#           fi
